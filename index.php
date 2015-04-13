@@ -4,7 +4,7 @@
 	error_reporting(-1);
 	ini_set("display_errors", "On");
 
-	define("IMAGES_PER_PAGE", 5);
+	define("IMAGES_PER_PAGE", 20);
 
 	$page = isset($_GET["p"]) && is_numeric($_GET["p"]) ? intval($_GET["p"]) : 1;
 ?>
