@@ -24,7 +24,8 @@
 	<body>
 		<h1>Image Search</h1>
 <?php
-		$solr = new Apache_Solr_Service("ec2-52-5-117-168.compute-1.amazonaws.com", 8983, "/solr/gettingstarted_shard1_replica2");
+		//$solr = new Apache_Solr_Service("ec2-52-5-117-168.compute-1.amazonaws.com", 8983, "/solr/gettingstarted_shard1_replica2");
+		$solr = new Apache_Solr_Service("localhost", 8983, "/solr/ir15");
 
 		if (!$solr->ping()) {
 			echo '<p class="error">The Solr service is not responding</p>';
@@ -43,7 +44,8 @@
 					$first_res = ($page - 1) * IMAGES_PER_PAGE;
 
 					//$results = $solr->search($query, 0, 20);
-					$results = $solr->search($query . " AND image:[* TO *]", $first_res, $first_res + IMAGES_PER_PAGE);
+					//$results = $solr->search($query . " AND url:[* TO *]", $first_res, IMAGES_PER_PAGE);
+					$results = $solr->search(strtolower($query), $first_res, IMAGES_PER_PAGE);
 
 					if ($results->getHttpStatus() == 200) {
 						//print_r($results->getRawResponse());
@@ -57,8 +59,8 @@
 							foreach ($results->response->docs as $doc) { 
 								//echo "$doc->id $doc->title <br />";
 
-								if (isset($doc->image) && !empty($doc->image)) {
-									echo '<div class="image"><a href="' . $doc->image . '" target="_blank"><img src="' . $doc->image . '" alt="" /></a></div>';
+								if (isset($doc->url) && !empty($doc->url)) {
+									echo '<div class="image"><a href="' . $doc->url . '" target="_blank"><img src="' . $doc->url . '" alt="" /></a></div>';
 								}
 							}
 
